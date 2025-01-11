@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy - NEXYZY',
-  description: 'Privacy policy for NEXYZY.',
+  title: 'Privacy ',
+  description: 'Privacy policy for soil++.',
 };
 
 export default function PrivacyPage() {

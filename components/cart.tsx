@@ -78,7 +78,7 @@ export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
             <div className="p-8 space-y-4">
               <div className="flex justify-between items-center">
                 <p className="font-mono uppercase">Total</p>
-                <p className="font-mono">${total}</p>
+                <p className="font-mono">mk{total}</p>
               </div>
               <p className="font-mono text-sm text-muted-foreground">
                 TAX AND SHIPPING NOT INCLUDED

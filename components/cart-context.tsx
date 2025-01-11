@@ -17,10 +17,7 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-// Want a full-featured optimistic cart?
-// Check out Next.js Commerce: https://github.com/vercel/commerce
-// Want to use Stripe instead?
-// Check out my starter: https://github.com/leerob/next-saas-starter
+
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
 
