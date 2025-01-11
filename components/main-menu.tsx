@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 enum MenuState {
@@ -54,6 +54,8 @@ interface MainMenuProps {
 
 export function MainMenu({ isBackVisible, onBack }: MainMenuProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const defaultMenuState =
     isBackVisible || pathname.startsWith('/p/')
       ? MenuState.BACK
@@ -89,7 +91,13 @@ export function MainMenu({ isBackVisible, onBack }: MainMenuProps) {
         return 'closed';
     }
   };
-
+  const handleMenuItemClick = (path: string) => {
+    setLoading(true); 
+    setTimeout(() => {
+      router.push(path);  
+      setLoading(false);  
+    }, 6500);  
+  };
   return (
     <div className="relative flex items-center">
       <button
@@ -154,6 +162,12 @@ export function MainMenu({ isBackVisible, onBack }: MainMenuProps) {
           </motion.nav>
         )}
       </AnimatePresence>
-    </div>
+      {/* Show loading indicator when in loading state */}
+      {loading && (
+    <div className="loading-indicator absolute top-0 left-0 w-full h-full flex justify-center items-center bg-opacity-50 bg-white z-50">
+        <img src="/favicon.ico" alt="Loading..." /> {/* Your loading icon */}
+        </div>
+        )}
+        </div>
   );
 }
