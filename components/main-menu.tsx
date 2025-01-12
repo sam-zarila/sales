@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 enum MenuState {
@@ -54,10 +54,8 @@ interface MainMenuProps {
 
 export function MainMenu({ isBackVisible, onBack }: MainMenuProps) {
   const pathname = usePathname();
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const defaultMenuState =
-    isBackVisible || pathname.startsWith('/p/')
+    isBackVisible || (pathname && pathname.startsWith('/a/'))
       ? MenuState.BACK
       : MenuState.CLOSED;
 
@@ -91,13 +89,7 @@ export function MainMenu({ isBackVisible, onBack }: MainMenuProps) {
         return 'closed';
     }
   };
-  const handleMenuItemClick = (path: string) => {
-    setLoading(true); 
-    setTimeout(() => {
-      router.push(path);  
-      setLoading(false);  
-    }, 6500);  
-  };
+
   return (
     <div className="relative flex items-center">
       <button
@@ -140,34 +132,29 @@ export function MainMenu({ isBackVisible, onBack }: MainMenuProps) {
             exit={{ opacity: 0, x: -20 }}
           >
             <ul className="flex items-center space-x-2">
-              {['HELP', 'TERMS', 'PRIVACY', 'ABOUT'].map((item, index) => (
-                <motion.li
-                  key={item}
-                  className={`bg-white px-3 py-1 rounded ${
-                    item === 'PRIVACY' ? 'hidden sm:block' : ''
-                  }`}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Link
-                    href={`/${item.toLowerCase()}`}
-                    className="text-sm font-mono hover:opacity-70 transition-opacity whitespace-nowrap"
-                  >
-                    {item}
-                  </Link>
-                </motion.li>
-              ))}
-            </ul>
+  {['HELP', 'TERMS', 'PRIVACY', 'ABOUT', 'IPHONE-ACCESSORIES'].map((item, index) => (
+    <motion.li
+      key={item}
+      className={`bg-white px-3 py-1 rounded ${
+        item === 'PRIVACY' ? 'hidden sm:block' : ''
+      }`}
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.1 }}
+    >
+      <Link
+        href={`/${item.toLowerCase()}`}  // This should now be correct
+        className="text-sm font-mono hover:opacity-70 transition-opacity whitespace-nowrap"
+      >
+        {item}
+      </Link>
+    </motion.li>
+  ))}
+</ul>
+
           </motion.nav>
         )}
       </AnimatePresence>
-      {/* Show loading indicator when in loading state */}
-      {loading && (
-    <div className="loading-indicator absolute top-0 left-0 w-full h-full flex justify-center items-center bg-opacity-50 bg-white z-50">
-        <img src="/favicon.ico" alt="Loading..." /> {/* Your loading icon */}
-        </div>
-        )}
-        </div>
+    </div>
   );
 }

@@ -1,45 +1,59 @@
 'use client';
 
-import React, { createContext, use, useState, useCallback } from 'react';
-import { type Product } from '@/lib/products';
+import React, { createContext, useState, useCallback, useContext } from 'react';
+import { Product, IphoneAccessory } from '@/lib/products'; // Ensure your product and accessory data are imported
 
-interface CartItem extends Product {
+interface CartItem extends Product, IphoneAccessory {
   quantity: number;
-  size: number;
+  size: string;
+  price: number;
+  description: string;
 }
 
 interface CartContextType {
   items: CartItem[];
-  addToCart: (product: Product, size: number) => void;
-  updateQuantity: (id: string, size: number, change: number) => void;
+  addToCart: (product: Product | IphoneAccessory, size: string) => void;
+  updateQuantity: (id: string, size: string, change: number) => void;
   total: number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
 
-  const addToCart = useCallback((product: Product, size: number) => {
+  // Add item to cart with appropriate size
+  const addToCart = useCallback((product: Product | IphoneAccessory, size: string) => {
     setItems((prevItems) => {
       const existingItemIndex = prevItems.findIndex(
-        (item) => item.id === product.id && item.size === size,
+        (item) => item.id === product.id && item.size === size
       );
+
+      // Create a new CartItem by spreading product and adding missing properties
+      const itemToAdd: CartItem = {
+        ...product,
+        quantity: 1,
+        size,
+        // Ensure all required properties from CartItem are included
+        price: 'price' in product ? product.price : 0, // Assuming price exists in both Product and IphoneAccessory
+        description: 'description' in product ? product.description : '', // Assuming description exists in both Product and IphoneAccessory
+      };
+
       if (existingItemIndex > -1) {
         return prevItems.map((item, index) =>
           index === existingItemIndex
             ? { ...item, quantity: item.quantity + 1 }
-            : item,
+            : item
         );
       } else {
-        return [...prevItems, { ...product, quantity: 1, size }];
+        return [...prevItems, itemToAdd];
       }
     });
   }, []);
 
+  // Update quantity of item in cart
   const updateQuantity = useCallback(
-    (id: string, size: number, change: number) => {
+    (id: string, size: string, change: number) => {
       setItems((prevItems) =>
         prevItems.reduce((acc, item) => {
           if (item.id === id && item.size === size) {
@@ -49,18 +63,29 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               : acc;
           }
           return [...acc, item];
-        }, [] as CartItem[]),
+        }, [] as CartItem[])
       );
     },
-    [],
+    []
   );
 
+  // Calculate total cost with dynamic pricing logic
   const total = items.reduce((acc, item) => {
-    const price = item.id.startsWith('sk')
-      ? item.id.includes('gray')
-        ? 40
-        : 20
-      : 20;
+    let price = 0;
+
+    // Check if it's an iPhone accessory or clothing
+    if ('sizeOptions' in item) {
+      // iPhone accessory pricing
+      price = 20; // Example price, adjust as needed
+    } else {
+      // Clothing item pricing
+      price = item.id.startsWith('sk')
+        ? item.id.includes('gray')
+          ? 40
+          : 20
+        : 20;
+    }
+
     return acc + price * item.quantity;
   }, 0);
 
@@ -71,8 +96,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+// Custom hook to use cart
 export function useCart() {
-  const context = use(CartContext);
+  const context = useContext(CartContext);
   if (context === undefined) {
     throw new Error('useCart must be used within a CartProvider');
   }
