@@ -63,7 +63,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               : acc;
           }
           return [...acc, item];
-        }, [] as CartItem[])
+        }, [] as CartItem[] )
       );
     },
     []
@@ -76,14 +76,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     // Check if it's an iPhone accessory or clothing
     if ('sizeOptions' in item) {
       // iPhone accessory pricing
-      price = 20; // Example price, adjust as needed
+      price = item.price || 0;
     } else {
       // Clothing item pricing
-      price = item.id.startsWith('sk')
-        ? item.id.includes('gray')
-          ? 40
-          : 20
-        : 20;
+      price = item.price || 0;
     }
 
     return acc + price * item.quantity;

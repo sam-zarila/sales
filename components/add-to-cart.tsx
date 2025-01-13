@@ -1,9 +1,7 @@
-'use client';
-
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Cart } from '@/components/cart';
-import { type Product, IphoneAccessory } from '@/lib/products';
+import { Product, iphoneAccessories, IphoneAccessory } from '@/lib/products';
 import { useCart } from './cart-context';
 
 export const CLOTHING_SIZES = [

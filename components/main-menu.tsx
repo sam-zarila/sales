@@ -1,7 +1,5 @@
-'use client';
-
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
@@ -11,53 +9,12 @@ enum MenuState {
   BACK,
 }
 
-const topBarVariants = {
-  closed: {
-    rotate: 0,
-    translateY: 0,
-    width: '16px',
-  },
-  open: {
-    rotate: 45,
-    translateY: 4,
-    width: '16px',
-  },
-  back: {
-    rotate: 45,
-    translateY: 7,
-    width: '10px',
-  },
-};
+const baseMenuItems = ['HELP', 'TERMS', 'PRIVACY', 'ABOUT', 'IPHONE-ACCESSORIES'];
 
-const bottomBarVariants = {
-  closed: {
-    rotate: 0,
-    translateY: 0,
-    width: '16px',
-  },
-  open: {
-    rotate: -45,
-    translateY: -4,
-    width: '16px',
-  },
-  back: {
-    rotate: -45,
-    translateY: -7,
-    width: '10px',
-  },
-};
-
-interface MainMenuProps {
-  isBackVisible: boolean;
-  onBack: any;
-}
-
-export function MainMenu({ isBackVisible, onBack }: MainMenuProps) {
-  const pathname = usePathname();
+const MainMenu = ({ isBackVisible, onBack }: { isBackVisible: boolean; onBack: () => void }) => {
+  const pathname = usePathname() ?? '';
   const defaultMenuState =
-    isBackVisible || (pathname && pathname.startsWith('/a/'))
-      ? MenuState.BACK
-      : MenuState.CLOSED;
+    isBackVisible || pathname.startsWith('/a/') ? MenuState.BACK : MenuState.CLOSED;
 
   const [menuState, setMenuState] = useState<MenuState>(defaultMenuState);
 
@@ -79,16 +36,16 @@ export function MainMenu({ isBackVisible, onBack }: MainMenuProps) {
     }
   };
 
-  const getVariant = (state: MenuState) => {
-    switch (state) {
-      case MenuState.OPEN:
-        return 'open';
-      case MenuState.BACK:
-        return 'back';
-      default:
-        return 'closed';
-    }
-  };
+  // Replace "IPHONE-ACCESSORIES" with "SNAPBACKS" when on the iPhone Accessories page
+  const modifiedMenuItems = baseMenuItems.map((item) =>
+    pathname === '/iphone-accessories' && item === 'IPHONE-ACCESSORIES'
+      ? 'SNAPBACKS'
+      : item
+  );
+
+  const filteredMenuItems = modifiedMenuItems.filter(
+    (item) => `/${item.toLowerCase()}` !== pathname
+  );
 
   return (
     <div className="relative flex items-center">
@@ -101,22 +58,17 @@ export function MainMenu({ isBackVisible, onBack }: MainMenuProps) {
         <span className="sr-only">
           {menuState === MenuState.BACK ? 'Back' : 'Menu'}
         </span>
-
         <div className="size-4 relative flex items-center justify-center">
-          {/* Top bar */}
           <motion.span
             className="absolute left-0 top-[4px] w-4 h-[2px] bg-black origin-center"
-            variants={topBarVariants}
-            initial={getVariant(defaultMenuState)}
-            animate={getVariant(menuState)}
+            initial={menuState === MenuState.CLOSED ? 'closed' : 'open'}
+            animate={menuState === MenuState.OPEN ? 'open' : 'closed'}
             transition={{ duration: 0.3, ease: [0.68, -0.55, 0.265, 1.55] }}
           />
-          {/* Bottom bar */}
           <motion.span
             className="absolute left-0 top-[12px] w-4 h-[2px] bg-black origin-center"
-            variants={bottomBarVariants}
-            initial={getVariant(defaultMenuState)}
-            animate={getVariant(menuState)}
+            initial={menuState === MenuState.CLOSED ? 'closed' : 'open'}
+            animate={menuState === MenuState.OPEN ? 'open' : 'closed'}
             transition={{ duration: 0.3, ease: [0.68, -0.55, 0.265, 1.55] }}
           />
         </div>
@@ -132,29 +84,30 @@ export function MainMenu({ isBackVisible, onBack }: MainMenuProps) {
             exit={{ opacity: 0, x: -20 }}
           >
             <ul className="flex items-center space-x-2">
-  {['HELP', 'TERMS', 'PRIVACY', 'ABOUT', 'IPHONE-ACCESSORIES'].map((item, index) => (
-    <motion.li
-      key={item}
-      className={`bg-white px-3 py-1 rounded ${
-        item === 'PRIVACY' ? 'hidden sm:block' : ''
-      }`}
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.1 }}
-    >
-      <Link
-        href={`/${item.toLowerCase()}`}  // This should now be correct
-        className="text-sm font-mono hover:opacity-70 transition-opacity whitespace-nowrap"
-      >
-        {item}
-      </Link>
-    </motion.li>
-  ))}
-</ul>
-
+              {filteredMenuItems.map((item, index) => (
+                <motion.li
+                  key={item}
+                  className={`bg-white px-3 py-1 rounded ${
+                    item === 'PRIVACY' ? 'hidden sm:block' : ''
+                  }`}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Link
+                    href={`/${item.toLowerCase()}`}
+                    className="text-sm font-mono hover:opacity-70 transition-opacity whitespace-nowrap"
+                  >
+                    {item}
+                  </Link>
+                </motion.li>
+              ))}
+            </ul>
           </motion.nav>
         )}
       </AnimatePresence>
     </div>
   );
-}
+};
+
+export default MainMenu;

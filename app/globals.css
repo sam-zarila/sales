@@ -85,3 +85,21 @@ html {
 [role='dialog'] {
   height: 100svh;
 }
+
+/* Add this CSS for rotating the image */
+.rotate-image {
+  animation: rotate 1s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+

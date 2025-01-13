@@ -1,13 +1,13 @@
 'use client';
 
-import { MainMenu } from './main-menu';
+import MainMenu from './main-menu';
 import { Cart } from './cart';
 import { useState } from 'react';
 import { useCart } from './cart-context';
 
 interface HeaderProps {
   isBackVisible: boolean;
-  onBack: any;
+  onBack: () => void;
 }
 
 export function Header({ isBackVisible, onBack }: HeaderProps) {
