@@ -122,7 +122,9 @@ export const products: Product[] = [
     name: 'Socks 01',
     image:
       'https://raw.githubusercontent.com/Bed-com-03-20/asset-s/41a8815a457eaf50c55ba1ffd41754e67ca68732/1478400-1.png',
+
   },
+  
 ];
 
 export const iphoneAccessories: IphoneAccessory[] = [
