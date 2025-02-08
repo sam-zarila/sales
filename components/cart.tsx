@@ -3,6 +3,7 @@ import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import { ChevronRight, Minus, Plus } from 'lucide-react';
 import { useCart } from './cart-context';
 import { CLOTHING_SIZES, IPHONE_SIZES } from './add-to-cart'; // Import dynamic sizes based on product type
+import { useRouter } from 'next/navigation';
 
 interface SizeOption {
   label: string;
@@ -11,6 +12,7 @@ interface SizeOption {
 
 export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
   const { items, updateQuantity, total } = useCart();
+  const router = useRouter()
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
@@ -94,15 +96,10 @@ export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
               <p className="font-mono text-sm text-muted-foreground">
                 TAX AND SHIPPING NOT INCLUDED
               </p>
-              <a
-                href="https://paychangu.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-between bg-black text-white p-4 font-mono"
-              >
+             
                 CONTINUE
                 <ChevronRight className="h-4 w-4" />
-              </a>
+             
             </div>
           </div>
         </div>
