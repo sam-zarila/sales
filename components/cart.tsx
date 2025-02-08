@@ -4,6 +4,7 @@ import { ChevronRight, Minus, Plus } from 'lucide-react';
 import { useCart } from './cart-context';
 import { CLOTHING_SIZES, IPHONE_SIZES } from './add-to-cart'; // Import dynamic sizes based on product type
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 interface SizeOption {
   label: string;
@@ -13,6 +14,13 @@ interface SizeOption {
 export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
   const { items, updateQuantity, total } = useCart();
   const router = useRouter()
+  const [loading, setLoading]= useState(false)
+
+
+  async function handleCheckout() {
+    
+    
+  }
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
