@@ -5,6 +5,7 @@ import { useCart } from './cart-context';
 import { CLOTHING_SIZES, IPHONE_SIZES } from './add-to-cart'; // Import dynamic sizes based on product type
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { emitWarning } from 'process';
 
 interface SizeOption {
   label: string;
@@ -18,7 +19,45 @@ export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
 
 
   async function handleCheckout() {
-    
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:3000/payments/pay',{
+        method:'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount:total,
+          currency:'MWK',
+          email:'zarilasam99@gmail.com',
+          tx_ref: `tx-${Date.now()}`,
+          phone_number: '+265987654321', 
+          name:'sam zarila',
+
+        }),
+
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data?.data?.checkout_url) {
+        // Redirect to the payment gateway
+        router.push(data?.data?.checkout_url);
+        
+      } else {
+        alert('Payment initiation failed')
+        
+      }
+      
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert('An error occurred while processing payment.');
+      
+    } finally{
+      setLoading(false)
+    }
+
     
   }
 
@@ -104,8 +143,16 @@ export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
               <p className="font-mono text-sm text-muted-foreground">
                 TAX AND SHIPPING NOT INCLUDED
               </p>
+              <button
+               onClick={handleCheckout}
+               className="w-full flex items-center justify-center bg-black text-white py-3 rounded-md"
+               disabled={loading}
+              >
+                   {loading ? 'Processing...' : 'CONTINUE'}
+                   <ChevronRight className="h-4 w-4 ml-2" />
+              </button>
              
-                CONTINUE
+             
                 <ChevronRight className="h-4 w-4" />
              
             </div>
