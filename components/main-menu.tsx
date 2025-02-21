@@ -9,7 +9,7 @@ enum MenuState {
   BACK,
 }
 
-const baseMenuItems = ['HELP', 'TERMS', 'PRIVACY', 'ABOUT', 'IPHONE-ACCESSORIES'];
+const baseMenuItems = ['HELP', 'TERMS', 'PRIVACY', 'ABOUT', 'IPHONE-ACCESSORIES','JERSEY CENTER'];
 
 const MainMenu = ({ isBackVisible, onBack }: { isBackVisible: boolean; onBack: () => void }) => {
   const pathname = usePathname() ?? '';
