@@ -5,6 +5,7 @@ import { ChevronRight, Minus, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCart } from './cart-context';
 import { useEffect } from 'react';
+import { publicDecrypt } from 'crypto';
 
 
 
@@ -23,7 +24,37 @@ export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
     script.src = 'https://paychangu.com/paychangu.js';
     script.async = true;
     document.body.appendChild(script);
-  });
+
+    return ( )=>{
+      document.body.removeChild(script);
+    }
+  },[]);
+
+  const handlePayment = () => {
+    if (typeof window.paychanguCheckout === 'function') {
+      window.paychanguCheckout({
+        public_key: "pub-test-Z2fK1oH31qEvBjtf7FnBhp6CtMZ0vpMW",
+        tx_ref: `tx-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        amount: total,
+        currency: "MWK",
+        callback_url: `${window.location.origin}/api/payment-callback`,
+        return_url: "",
+        customer: {
+          email: "zarilasam99@gmail.com",
+          first_name: "Cust",
+          last_name: "Name",
+        },
+        customization: {
+          title: "Complete Your Purchase",
+          description: "Payment for items in cart",
+        }
+        meta: {
+          order_id: `order-${Date.now()}`,
+          items: items.length.toString()
+        }
+      });
+    }
+  };
 
 
 
@@ -88,6 +119,7 @@ export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
               </p>
 
               <button
+                onClick={handlePayment}
                
                 className="w-full bg-black text-white flex items-center justify-center rounded-md py-2"
               >
