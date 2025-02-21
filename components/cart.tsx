@@ -4,6 +4,7 @@ import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import { ChevronRight, Minus, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCart } from './cart-context';
+import { useEffect } from 'react';
 
 
 
@@ -16,6 +17,13 @@ declare global {
 export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
   const { items, updateQuantity, total } = useCart();
   const router = useRouter();
+
+  useEffect(() =>{
+    const script = document.createElement('script');
+    script.src = 'https://paychangu.com/paychangu.js';
+    script.async = true;
+    document.body.appendChild(script);
+  });
 
 
 
