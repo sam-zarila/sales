@@ -6,8 +6,11 @@ import { useRouter } from 'next/navigation';
 import { useCart } from './cart-context';
 
 
+
 declare global {
-  
+  interface Window{
+    paychanguCheckout:(Config:any) => void;
+  }
 }
 
 export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
