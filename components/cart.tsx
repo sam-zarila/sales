@@ -5,6 +5,11 @@ import { ChevronRight, Minus, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCart } from './cart-context';
 
+
+declare global {
+  
+}
+
 export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
   const { items, updateQuantity, total } = useCart();
   const router = useRouter();
