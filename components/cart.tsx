@@ -22,6 +22,9 @@ export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
     setLoading(true);
 
     try {
+
+      const tx_ref = `tx-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
       const response = await fetch('http://localhost:3000/payments/pay',{
         method:'POST',
         headers: {
