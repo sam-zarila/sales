@@ -5,7 +5,7 @@ import { useCart } from './cart-context';
 import { CLOTHING_SIZES, IPHONE_SIZES } from './add-to-cart'; // Import dynamic sizes based on product type
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { emitWarning } from 'process';
+
 
 interface SizeOption {
   label: string;
@@ -28,12 +28,16 @@ export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+
           amount:total,
+          callback_url: `${window.location.origin}/api/payment-callback`,
+          return_url: `${window.location.origin}/order-details?tx_ref=${tx_ref}`,
           currency:'MWK',
           email:'zarilasam99@gmail.com',
           tx_ref: `tx-${Date.now()}`,
           phone_number: '+265987654321', 
           name:'sam zarila',
+
 
         }),
 
