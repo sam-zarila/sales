@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import { ChevronRight, Minus, Plus } from 'lucide-react';
 import { useCart } from './cart-context';
-import { CLOTHING_SIZES, IPHONE_SIZES } from './add-to-cart'; // Import dynamic sizes based on product type
+import { CLOTHING_SIZES, IPHONE_SIZES } from './add-to-cart';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -22,6 +22,7 @@ export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
     try {
       const tx_ref = `tx-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
+      // Update return_url and callback_url to the correct destinations
       const response = await fetch('http://localhost:3000/payments/pay', {
         method: 'POST',
         headers: {
@@ -29,8 +30,8 @@ export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
         },
         body: JSON.stringify({
           amount: total,
-          callback_url: `${window.location.origin}/api/payment-callback`, // Callback after payment
-          return_url: `${window.location.origin}/order-details`, // Redirect after payment
+          callback_url: `${window.location.origin}/api/payment-callback`, // Server endpoint for payment validation
+          return_url: `${window.location.origin}/order-details`, // User's redirection URL after successful payment
           currency: 'MWK',
           email: 'zarilasam99@gmail.com',
           tx_ref: tx_ref,
@@ -62,9 +63,7 @@ export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
         <div className="flex flex-col h-full">
           <div className="flex-1 overflow-auto py-6 px-8">
             {items.map((item) => {
-              // Dynamically select the sizes based on the item type (product)
               const sizes = item.id.includes('iphone') ? IPHONE_SIZES : CLOTHING_SIZES;
-
               return (
                 <div key={`${item.id}-${item.size}`} className="flex gap-4 py-6 first:pt-0">
                   <div className="relative aspect-square h-[120px] bg-[#FFFFFF]">
@@ -132,14 +131,19 @@ export function Cart({ isOpen, onClose }: { isOpen: boolean; onClose: any }) {
               <p className="font-mono text-sm text-muted-foreground">
                 TAX AND SHIPPING NOT INCLUDED
               </p>
-              <button
+
+              <a href="/order-details"  className="w-full flex items-center justify-center bg-black text-white py-3 rounded-md">
+               CONTINUE
+              
+              </a>
+              {/* <button
                 onClick={handleCheckout}
                 className="w-full flex items-center justify-center bg-black text-white py-3 rounded-md"
-                disabled={loading}
+                // disabled={loading}
               >
                 {loading ? 'Processing...' : 'CONTINUE'}
                 <ChevronRight className="h-4 w-4 ml-2" />
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

@@ -75,19 +75,39 @@ export default function OrderDetailsForm() {
               disabled={formSubmitting}
             />
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Delivery Instructions
+              location
             </label>
-            <textarea
-              name="delivery_notes"
+            <input
+              type="tel"
+              name="phone_number"
+              required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              rows={2}
-              placeholder="Gate code, landmarks, preferred time..."
+              placeholder="+265 XXX XXX XXX"
               disabled={formSubmitting}
             />
           </div>
+          <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Courier Service *
+                    </label>
+                    <select
+                        name="courier_service"
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        disabled={formSubmitting}
+                    >
+                        <option value="">Select a courier service</option>
+                        <option value="dhl">CTS</option>
+                        <option value="fedex">FedEx International</option>
+                        <option value="ups">UPS Worldwide</option>
+                        <option value="local">Local Courier Service</option>
+                        <option value="self_pickup">Self Pickup</option>
+                    </select>
+                    </div>
+
+          
 
           {submitError && (
             <p className="text-red-500 text-sm">{submitError}</p>
