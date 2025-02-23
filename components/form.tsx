@@ -48,19 +48,33 @@ export default function OrderDetailsForm() {
         <h1 className="text-2xl font-bold text-gray-900 mb-6">Delivery Information</h1>
         
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
+        <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Full Address *
+              full Name
             </label>
-            <textarea
-              name="shipping_address"
+            <input
+              type="tel"
+              name="phone_number"
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              rows={4}
-              placeholder="Street, City, Postal Code"
+              placeholder="sam zarila"
               disabled={formSubmitting}
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              email address
+            </label>
+            <input
+              type="tel"
+              name="phone_number"
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="zarilasam99@gmail.com"
+              disabled={formSubmitting}
+            />
+          </div>
+          
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -84,7 +98,7 @@ export default function OrderDetailsForm() {
               name="phone_number"
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="+265 XXX XXX XXX"
+              placeholder="soche, Blantyre"
               disabled={formSubmitting}
             />
           </div>
@@ -100,9 +114,8 @@ export default function OrderDetailsForm() {
                     >
                         <option value="">Select a courier service</option>
                         <option value="dhl">CTS</option>
-                        <option value="fedex">FedEx International</option>
-                        <option value="ups">UPS Worldwide</option>
-                        <option value="local">Local Courier Service</option>
+                        <option value="fedex">SPEED</option>
+                       
                         <option value="self_pickup">Self Pickup</option>
                     </select>
                     </div>
@@ -116,7 +129,7 @@ export default function OrderDetailsForm() {
           <button
             type="submit"
             disabled={formSubmitting}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+             className="w-full flex items-center justify-center bg-black text-white py-3 rounded-md"
           >
             {formSubmitting ? (
               <div className="flex items-center justify-center">
