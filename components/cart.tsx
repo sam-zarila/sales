@@ -1,6 +1,12 @@
 'use client';
 
 import { useState, useEffect } from "react";
+
+declare global {
+  interface Window {
+    PaychanguCheckout?: (options: any) => void;
+  }
+}
 import Image from "next/image";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Minus, Plus } from "lucide-react";
